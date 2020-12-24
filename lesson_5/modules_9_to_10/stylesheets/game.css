@@ -62,6 +62,14 @@ main {
 #apples.guess_5 { background-position: 0 -1610px; }
 #apples.guess_6 { display: none; }
 
+#replay {
+  display: none;
+}
+
+#replay.visible {
+  display: inline;
+}
+
 #spaces,
 #guesses,
 p {
