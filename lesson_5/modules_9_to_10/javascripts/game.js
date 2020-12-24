@@ -16,29 +16,37 @@ document.addEventListener('DOMContentLoaded', event => {
     };
   }();
 
-  let Game = function() {
-    this.word = '';
-    this.countIncorrectGuesses = 0;
+  function Game() {
+    this.incorrect = 0;
     this.lettersGuessed = [];
-    this.countAllowedGuesses = 6;
-  };
+    this.correctSpaces = 0;
+    this.word = randomWord();
+    if (!this.word) {
+      this.displayMessage("Sorry, I've run out of words!");
+      return this;
+    }
+    this.word = this.word.split('');
+    this.init();
+  }
 
-  // BEHAVIOR:
-  // Choose a word from the words array for the current game. If all words are
-  //   chosen, then show "Sorry, I've run out of words!"
-  Game.prototype.chooseCurrentWord = () => {
-    let word = randomWord();
-    if (word) {
-      this.word = word;
-    } else {
-        console.log("Sorry, I've run out of words!");
+  Game.prototype = {
+    createBlanks() {
+      let spaces = (new Array(this.word.length + 1)).join('<span></span>');
+
+      let spans = letters.querySelectorAll('span');
+      spans.forEach(span => {
+        span.parentNode.removeChild(span);
+      });
+      letters.insertAdjacentHTML('beforeend', spaces);
+      this.spaces = document.querySelectorAll('#spaces span');
+    },
+    displayMessage(text) {
+      $message.text(text);
+    },
+    init() {
+      this.createBlanks();
     }
   };
 
-  // Initialize blanks in the "Word: " container, the amount of which is equal
-  //   to the length of the chosen word
-  Game.prototype.initializeWordDisplay = () => {
-    let length = this.word.length;
-    this.wordDisplay = new Array(length).fill('_');
-  };
+  new Game();
 });
